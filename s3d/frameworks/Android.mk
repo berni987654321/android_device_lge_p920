@@ -37,6 +37,7 @@ LOCAL_SRC_FILES := \
             $(call all-subdir-html-files)
 
 LOCAL_MODULE:= s3d_api
+LOCAL_DROIDDOC_OPTIONS := com.ti.s3d
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 LOCAL_DROIDDOC_USE_STANDARD_DOCLET := true
 
