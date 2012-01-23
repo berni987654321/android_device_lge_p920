@@ -16,34 +16,54 @@
 
 package com.ti.s3d;
 
+import java.lang.IllegalArgumentException;
+
+import android.app.Activity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
 /**
    S3DView provides a mechanism to inform the surface composer (SurfaceFlinger)
-   that stereoscopic content is being rendered unto a surface.
+   that stereoscopic content is being rendered unto a surface or an Activity window.
    <br /><br />
-   Currently S3DView only supports this mechanism when using SurfaceView, as
-   a dedicated surface is needed.
-   <br /><br />
-   The typical use is:<br />
+
+   The typical use of this class when using SurfaceView or one of its descendants is:<br />
    <p><blockquote><pre>
    SurfaceView view = new SurfaceView(context);<br />
    SurfaceHolder holder = view.getHolder();<br />
-   S3DView s3dView = S3DView(holder, Layout.SIDE_BY_SIDE_LR, RenderMode.STEREO);
+   S3DView s3dView = S3DView(holder, Layout.SIDE_BY_SIDE_LR, RenderMode.STEREO);<br />
+   or <br />
+   S3DView s3dView = S3DView(holder, Layout.TOPBOTTOM_L, RenderMode.STEREO);
    </pre></blockquote>
-   On your manifest file you will have to add:
+
+   For a standard Activity window, the application has to invoke the methods provided by this class
+   after the underlying surface has been created. The easiest way to ensure this is by overriding 
+   the method onWindowFocusChanged of the required target Activity; when onWindowFocusChanged is called
+   the activity window will already have a surface attached to it. If the S3DView method is invoked before
+   onWindowFocusChanged has happened, the configuration will be ignored.
+   <p><blockquote><pre>
+    public void onWindowFocusChanged(boolean hasFocus) {<br />
+        super.onWindowFocusChanged(hasFocus);<br />
+        if (hasFocus) {<br />
+            S3DView.configureWindow(this, Layout.SIDE_BY_SIDE_LR, RenderMode.STEREO);<br />
+        }<br />
+    }<br />
+   </pre></blockquote>
+
+   To use this class in an application, the following is required in AndroidManifest.xml 
+   as a child of the <application> element:
    <p><blockquote><pre>
    {@code <uses-library android:name="com.ti.s3d" android:required="false" />}
    </pre></blockquote>
 
-   If you are using a native build, you will have to add to your Androd.mk file:
+   Additionally, for a native build, the following line should be added in Android.mk:
    <p><blockquote><pre>
    LOCAL_JAVA_LIBRARIES := com.ti.s3d
    </pre></blockquote>
+
    @author Alberto Aguirre
    @author Jagadeesh Pakaravoor
-   @version 1.0, Nov 2011
+   @version 1.1, Jan 2012
  */
 
 public class S3DView implements SurfaceHolder.Callback {
@@ -57,10 +77,10 @@ public class S3DView implements SurfaceHolder.Callback {
     }
 
     /**
-      Standard constructor. It registers callback with SurfaceHolder.
-      Typically this is called before SurfaceView has been layed out.
-      If SurfaceView already contains a valid surface, then the configuration
-      is performed during the constructor
+      This constructor is used to inform the compositor about stereo content in SurfaceView.
+      If the surface holder already contains a valid surface, then the configuration
+      is done during the constructor. Otherwise, a callback is registered with
+      the given surface holder instance and performs the configuration during surfaceChanged.
       @param sh The holder associated with the SurfaceView where stereo content will be rendered to.
       @param layout Describes in which position the stereo views are rendered as.
       @param mode Describes if the stereo view should be rendered in stereo or just one of the views
@@ -74,6 +94,21 @@ public class S3DView implements SurfaceHolder.Callback {
             this.holder = sh;
             config();
         }
+    }
+
+    /**
+      This constructor is used to inform the compositor about stereo content in a regular window
+      associated with an Activity.
+      @param a The activity that owns the window where stereo content is rendered to.
+      @param layout Describes in which position the stereo views are rendered as.
+      @param mode Describes if the stereo view should be rendered in stereo or just one of the views
+    */
+    public S3DView(Activity a, Layout layout, RenderMode mode) {
+        nativeClassInit();
+        this.layout = layout;
+        this.mode = mode;
+        this.activity = a;
+        config();
     }
 
     /**
@@ -130,6 +165,34 @@ public class S3DView implements SurfaceHolder.Callback {
     }
 
     /**
+      Convenience method to configure a window. It's the equivalent of:<br />
+      S3DView v = new S3DView(a, layout, mode);
+      @param a The activity that owns the window where stereo content is rendered to.
+      @param layout Describes in which position the stereo views are rendered as.
+      @param mode Describes if the stereo view should be rendered in stereo or just one of the views
+    */
+    public static void configureWindow(Activity a, Layout layout, RenderMode mode) {
+        S3DView v = new S3DView(a, layout, mode);
+    }
+
+    /**
+      Convenience method to configure a surface. It's the equivalent of:<br />
+      S3DView v = new S3DView(sh, layout, mode);
+      Throws IllegalArgumentException if the given surface holder doesn't contain
+      a valid surface.
+      @param sh The holder associated with the SurfaceView where stereo content will be rendered to.
+      @param layout Describes in which position the stereo views are rendered as.
+      @param mode Describes if the stereo view should be rendered in stereo or just one of the views
+
+    */
+    public static void configureSurface(SurfaceHolder sh, Layout layout, RenderMode mode) {
+        if(!sh.getSurface().isValid()) {
+            throw new IllegalArgumentException("Surface is not valid");
+        }
+        S3DView v = new S3DView(sh, layout, mode);
+    }
+
+    /**
       SurfaceHolder.Callback implementation.
     */
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -150,9 +213,15 @@ public class S3DView implements SurfaceHolder.Callback {
     };
 
     private void config() {
-        if (holder != null)
+        if (holder != null) {
             native_setConfig(holder.getSurface(), layout.getType(),
                             layout.getLayoutOrder(), mode.getMode());
+        } else if (activity != null) {
+            native_setWindowConfig(activity.getComponentName().flattenToString(),
+                               layout.getType(),
+                               layout.getLayoutOrder(),
+                               mode.getMode());
+        }
     }
 
     /**
@@ -226,8 +295,10 @@ public class S3DView implements SurfaceHolder.Callback {
     private Layout layout;
     private RenderMode mode;
     private SurfaceHolder holder;
+    private Activity activity;
 
     private native void native_setConfig(Surface s, int type, int order, int mode);
+    private native void native_setWindowConfig(String windowName, int type, int order, int mode);
     private native S3DView.Layout native_getPrefLayout();
     private native void nativeClassInit();
 

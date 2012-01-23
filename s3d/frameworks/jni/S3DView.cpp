@@ -44,11 +44,11 @@ static lo_t lo;
 enum { //keep in sync with S3DSurfaceFlinger.h
     SET_SURF_CONFIG = 4000,
     GET_PREF_LAYOUT = 4001,
+    SET_WINDOW_CONFIG = 4003,
 };
 
 // ---------------------------------------------------------------------------
-static sp<Surface> getSurface(JNIEnv* env, jobject surfobj)
-{
+static sp<Surface> getSurface(JNIEnv* env, jobject surfobj) {
     sp<Surface> surf(reinterpret_cast<Surface*>(env->GetIntField(surfobj, so.surface)));
     if (surf == 0) {
         jniThrowException(env, "java/lang/NullPointerException", "Failed obtaining native surface");
@@ -59,9 +59,12 @@ static sp<Surface> getSurface(JNIEnv* env, jobject surfobj)
     return surf;
 }
 
-static status_t sendCommand(uint32_t cmd, const sp<Surface> surface, Parcel *reply,
-                        const int32_t *data, const int32_t nElements)
-{
+static status_t sendCommand(uint32_t cmd,
+                            const sp<Surface> surface,
+                            const String8& name,
+                            Parcel *reply,
+                            const int32_t *data,
+                            const int32_t nElements) {
     sp<IServiceManager> sm = defaultServiceManager();
     sp<IBinder> service = sm->checkService(String16("SurfaceFlinger"));
     if (service == NULL) {
@@ -90,6 +93,10 @@ static status_t sendCommand(uint32_t cmd, const sp<Surface> surface, Parcel *rep
         parcel.writeStrongBinder(surface->asBinder());
     }
 
+    if (!name.isEmpty()) {
+        parcel.writeString8(name);
+    }
+
     for (int32_t i = 0; i < nElements; i++)
         parcel.writeInt32(data[i]);
 
@@ -101,19 +108,33 @@ static status_t sendCommand(uint32_t cmd, const sp<Surface> surface, Parcel *rep
 }
 
 static void S3DView_setConfig(JNIEnv* env, jclass clazz, jobject surf,
-                                jint type, jint order, jint mode)
-{
+                                jint type, jint order, jint mode) {
     const sp<Surface>& sur(getSurface(env, surf));
     Parcel reply;
     int32_t data[]={type, order, mode};
-    sendCommand(SET_SURF_CONFIG, sur, &reply, data, 3);
+    sendCommand(SET_SURF_CONFIG, sur, String8(), &reply, data, 3);
 }
 
-static jobject S3DView_getPrefLayout(JNIEnv* env, jclass clazz)
-{
+static void S3DView_setWindowConfig(JNIEnv* env, jclass clazz,
+                                    jstring jname,
+                                    jint type,
+                                    jint order,
+                                    jint mode) {
+    Parcel reply;
+    int32_t data[]={type, order, mode};
+
+    const jchar* str = env->GetStringCritical(jname, 0);
+    const String8 name(str, env->GetStringLength(jname));
+    env->ReleaseStringCritical(jname, str);
+
+    sendCommand(SET_WINDOW_CONFIG, NULL, name, &reply, data, 3);
+}
+
+
+static jobject S3DView_getPrefLayout(JNIEnv* env, jclass clazz) {
     jfieldID layoutID = lo.sbs_LR;
     Parcel reply;
-    if(sendCommand(GET_PREF_LAYOUT, NULL, &reply, NULL, 0) == NO_ERROR) {
+    if(sendCommand(GET_PREF_LAYOUT, NULL, String8(), &reply, NULL, 0) == NO_ERROR) {
         int32_t layoutType = reply.readInt32();
         int32_t layoutOrder = reply.readInt32();
         if(layoutType == eTopBottom && layoutOrder == eLeftViewFirst)
@@ -135,7 +156,8 @@ static void nativeClassInit(JNIEnv* env, jclass clazz);
 static const JNINativeMethod gMethods[] = {
     { "nativeClassInit",     "()V", (void*)nativeClassInit },
     { "native_setConfig",   "(Landroid/view/Surface;III)V", (void*)S3DView_setConfig},
-    { "native_getPrefLayout",   "()Lcom/ti/s3d/S3DView$Layout;", (void*)S3DView_getPrefLayout}
+    { "native_getPrefLayout",   "()Lcom/ti/s3d/S3DView$Layout;", (void*)S3DView_getPrefLayout},
+    { "native_setWindowConfig",   "(Ljava/lang/String;III)V", (void*)S3DView_setWindowConfig}
 };
 
 static void nativeClassInit(JNIEnv* env, jclass clazz) {
