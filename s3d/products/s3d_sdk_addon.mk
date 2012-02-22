@@ -1,19 +1,22 @@
 # List of apps and optional libraries (Java and native) to put in the add-on system image.
 PRODUCT_PACKAGES := \
-    com.ti.s3d
+    com.ti.s3d \
+    libs3dview_jni \
+    S3DCowboids
 
 # name of the add-on
 PRODUCT_SDK_ADDON_NAME := s3d
+
+# Manually copy the optional library XML files in the system image.
+PRODUCT_COPY_FILES := \
+    device/ti/common-open/s3d/frameworks/com.ti.s3d.xml:system/etc/permissions/com.ti.s3d.xml
 
 # Copy the manifest and hardware files for the SDK add-on.
 # The content of those files is manually created for now.
 PRODUCT_SDK_ADDON_COPY_FILES := \
     device/ti/common-open/s3d/sdk_addon/manifest.ini:manifest.ini \
-    device/ti/common-open/s3d/sdk_addon/hardware.ini:hardware.ini
-
-# Add this to PRODUCT_SDK_ADDON_COPY_FILES to copy the files for an
-# emulator skin (or for samples)
-#$(call find-copy-subdir-files,*,device/sample/skins/WVGAMedDpi,skins/WVGAMedDpi)
+    device/ti/common-open/s3d/sdk_addon/hardware.ini:hardware.ini \
+    $(call find-copy-subdir-files,*,device/ti/common-open/s3d/apps/Cowboids,samples/S3DCowboids)
 
 # Copy the jar files for the optional libraries that are exposed as APIs.
 PRODUCT_SDK_ADDON_COPY_MODULES := \
