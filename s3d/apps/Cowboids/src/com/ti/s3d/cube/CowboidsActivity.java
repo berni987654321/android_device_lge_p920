@@ -18,7 +18,6 @@ package com.ti.s3d.cube;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.content.Context;
 
 import com.ti.s3d.render.StereoGLView;
 

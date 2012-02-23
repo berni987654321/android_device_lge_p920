@@ -18,16 +18,7 @@ package com.ti.s3d.render;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
-import java.lang.Math;
-
-import java.util.ArrayList;
-import android.util.Log;
-
 public interface Scene {
-
     public void draw(GL10 gl);
     public void drawEnd(GL10 gl);
     public void setup(GL10 gl, int w, int h);

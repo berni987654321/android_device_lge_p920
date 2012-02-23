@@ -32,8 +32,6 @@ import android.opengl.GLUtils;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.util.Log;
-
 public class TexturedCube {
 
     private FloatBuffer vertices;
