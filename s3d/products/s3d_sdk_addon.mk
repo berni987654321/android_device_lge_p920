@@ -22,7 +22,8 @@ PRODUCT_SDK_ADDON_COPY_FILES := \
 PRODUCT_SDK_ADDON_COPY_MODULES := \
     com.ti.s3d:libs/s3d.jar
 
-PRODUCT_SDK_ADDON_STUB_DEFS := $(LOCAL_PATH)/stub_defs.txt
+# Build system considers this a global variable, not a part of this product def
+PRODUCT_SDK_ADDON_STUB_DEFS += $(LOCAL_PATH)/stub_defs.txt
 
 # Name of the doc to generate and put in the add-on. This must match the name defined
 # in the optional library with the tag
