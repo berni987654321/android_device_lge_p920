@@ -4,7 +4,7 @@ include_s3d_makefiles = yes
 endif
 endif
 
-ifdef OMAP_ENHANCEMENT_S3D
+ifeq ($(OMAP_ENHANCEMENT_S3D), true)
 include_s3d_makefiles = yes
 endif
 
