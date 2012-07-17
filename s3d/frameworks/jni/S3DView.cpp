@@ -22,7 +22,7 @@
 
 #include <binder/Parcel.h>
 #include <binder/IServiceManager.h>
-#include <surfaceflinger/Surface.h>
+#include <gui/Surface.h>
 #include <ui/S3DFormat.h>
 
 using namespace android;
@@ -68,7 +68,7 @@ static status_t sendCommand(uint32_t cmd,
     sp<IServiceManager> sm = defaultServiceManager();
     sp<IBinder> service = sm->checkService(String16("SurfaceFlinger"));
     if (service == NULL) {
-        LOGE("failed to find SurfaceFlinger service");
+        ALOGE("failed to find SurfaceFlinger service");
         return BAD_VALUE;
     }
 
@@ -77,13 +77,13 @@ static status_t sendCommand(uint32_t cmd,
     //Could not obtain the interface name
     status = service->transact(IBinder::INTERFACE_TRANSACTION, dummy, &rep);
     if (status != NO_ERROR) {
-        LOGE("failed to get SurfaceFlinger service interface name");
+        ALOGE("failed to get SurfaceFlinger service interface name");
         return status;
     }
 
     String16 ifName = rep.readString16();
     if (ifName.size() <= 0) {
-        LOGE("interface name is empty");
+        ALOGE("interface name is empty");
         return BAD_VALUE;
     }
 
@@ -102,7 +102,7 @@ static status_t sendCommand(uint32_t cmd,
 
     status = service->transact(cmd, parcel, reply);
     if (status)
-        LOGE("failed transacting with surfaceflinger (%x)", status);
+        ALOGE("failed transacting with surfaceflinger (%x)", status);
 
     return status;
 }
@@ -183,7 +183,7 @@ static int registerMethods(JNIEnv* env) {
     /* look up the class */
     clazz = env->FindClass(kClassName);
     if (clazz == NULL) {
-        LOGE("Can't find class %s\n", kClassName);
+        ALOGE("Can't find class %s\n", kClassName);
         return -1;
     }
 
@@ -191,7 +191,7 @@ static int registerMethods(JNIEnv* env) {
     if (env->RegisterNatives(clazz, gMethods,
             sizeof(gMethods) / sizeof(gMethods[0])) != JNI_OK)
     {
-        LOGE("Failed registering methods for %s\n", kClassName);
+        ALOGE("Failed registering methods for %s\n", kClassName);
         return -1;
     }
 
@@ -203,13 +203,13 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     jint result = -1;
 
     if (vm->GetEnv((void**) &env, JNI_VERSION_1_4) != JNI_OK) {
-        LOGE("ERROR: GetEnv failed\n");
+        ALOGE("ERROR: GetEnv failed\n");
         goto bail;
     }
     assert(env != NULL);
 
     if (registerMethods(env) != 0) {
-        LOGE("ERROR: S3DView native registration failed\n");
+        ALOGE("ERROR: S3DView native registration failed\n");
         goto bail;
     }
 
