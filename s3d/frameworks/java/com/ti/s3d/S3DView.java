@@ -37,7 +37,7 @@ import android.view.SurfaceHolder;
    </pre></blockquote>
 
    For a standard Activity window, the application has to invoke the methods provided by this class
-   after the underlying surface has been created. The easiest way to ensure this is by overriding 
+   after the underlying surface has been created. The easiest way to ensure this is by overriding
    the method onWindowFocusChanged of the required target Activity; when onWindowFocusChanged is called
    the activity window will already have a surface attached to it. If the S3DView method is invoked before
    onWindowFocusChanged has happened, the configuration will be ignored.
@@ -50,7 +50,7 @@ import android.view.SurfaceHolder;
     }<br />
    </pre></blockquote>
 
-   To use this class in an application, the following is required in AndroidManifest.xml 
+   To use this class in an application, the following is required in AndroidManifest.xml
    as a child of the <application> element:
    <p><blockquote><pre>
    {@code <uses-library android:name="com.ti.s3d" android:required="false" />}
@@ -108,6 +108,29 @@ public class S3DView implements SurfaceHolder.Callback {
         this.layout = layout;
         this.mode = mode;
         this.activity = a;
+        config();
+    }
+
+    /**
+      Equivalent to S3DView(Layout.SIDE_BY_SIDE_LR, RenderMode.STEREO)
+      @see #S3DView(Layout, RenderMode)
+    */
+    public S3DView() {
+        this(Layout.SIDE_BY_SIDE_LR, RenderMode.STEREO);
+    }
+
+    /**
+      This constructor is used to inform the compositor about stereo content in SurfaceView layer.
+      If the surface holder already contains a valid surface, then the configuration
+      is done during the constructor. Otherwise, a callback is registered with
+      the given surface holder instance and performs the configuration during surfaceChanged.
+      @param layout Describes in which position the stereo views are rendered as.
+      @param mode Describes if the stereo view should be rendered in stereo or just one of the views
+    */
+    public S3DView(Layout layout, RenderMode mode) {
+        nativeClassInit();
+        this.layout = layout;
+        this.mode = mode;
         config();
     }
 
@@ -215,12 +238,15 @@ public class S3DView implements SurfaceHolder.Callback {
     private void config() {
         if (holder != null) {
             native_setConfig(holder.getSurface(), layout.getType(),
-                            layout.getLayoutOrder(), mode.getMode());
+                                layout.getLayoutOrder(), mode.getMode());
         } else if (activity != null) {
             native_setWindowConfig(activity.getComponentName().flattenToString(),
-                               layout.getType(),
-                               layout.getLayoutOrder(),
-                               mode.getMode());
+                                layout.getType(),
+                                layout.getLayoutOrder(),
+                                mode.getMode());
+        } else {
+            native_setSurfaceViewCfg(layout.getType(),
+                                layout.getLayoutOrder(), mode.getMode());
         }
     }
 
@@ -299,6 +325,7 @@ public class S3DView implements SurfaceHolder.Callback {
 
     private native void native_setConfig(Surface s, int type, int order, int mode);
     private native void native_setWindowConfig(String windowName, int type, int order, int mode);
+    private native void native_setSurfaceViewCfg(int type, int order, int mode);
     private native S3DView.Layout native_getPrefLayout();
     private native void nativeClassInit();
 

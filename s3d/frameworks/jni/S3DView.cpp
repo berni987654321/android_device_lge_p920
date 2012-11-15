@@ -45,6 +45,7 @@ enum { //keep in sync with S3DSurfaceFlinger.h
     SET_SURF_CONFIG = 4000,
     GET_PREF_LAYOUT = 4001,
     SET_WINDOW_CONFIG = 4003,
+    SET_SURFACE_VIEW_CONFIG = 4004,
 };
 
 // ---------------------------------------------------------------------------
@@ -107,6 +108,44 @@ static status_t sendCommand(uint32_t cmd,
     return status;
 }
 
+static status_t sendCommand(uint32_t cmd,
+                            Parcel *reply,
+                            const int32_t *data,
+                            const int32_t nElements) {
+    sp<IServiceManager> sm = defaultServiceManager();
+    sp<IBinder> service = sm->checkService(String16("SurfaceFlinger"));
+    if (service == NULL) {
+        ALOGE("failed to find SurfaceFlinger service");
+        return BAD_VALUE;
+    }
+
+    Parcel parcel, dummy, rep;
+    status_t status;
+    //Could not obtain the interface name
+    status = service->transact(IBinder::INTERFACE_TRANSACTION, dummy, &rep);
+    if (status != NO_ERROR) {
+        ALOGE("failed to get SurfaceFlinger service interface name");
+        return status;
+    }
+
+    String16 ifName = rep.readString16();
+    if (ifName.size() <= 0) {
+        ALOGE("interface name is empty");
+        return BAD_VALUE;
+    }
+
+    parcel.writeInterfaceToken(ifName);
+
+    for (int32_t i = 0; i < nElements; i++)
+        parcel.writeInt32(data[i]);
+
+    status = service->transact(cmd, parcel, reply);
+    if (status)
+        ALOGE("failed transacting with surfaceflinger (%x)", status);
+
+    return status;
+}
+
 static void S3DView_setConfig(JNIEnv* env, jclass clazz, jobject surf,
                                 jint type, jint order, jint mode) {
     const sp<Surface>& sur(getSurface(env, surf));
@@ -130,6 +169,12 @@ static void S3DView_setWindowConfig(JNIEnv* env, jclass clazz,
     sendCommand(SET_WINDOW_CONFIG, NULL, name, &reply, data, 3);
 }
 
+static void S3DView_setSurfaceView(JNIEnv* env, jclass clazz,
+                                    jint type, jint order, jint mode) {
+    Parcel reply;
+    int32_t data[] = {type, order, mode};
+    sendCommand(SET_SURFACE_VIEW_CONFIG, &reply, data, 3);
+}
 
 static jobject S3DView_getPrefLayout(JNIEnv* env, jclass clazz) {
     jfieldID layoutID = lo.sbs_LR;
@@ -155,9 +200,10 @@ static void nativeClassInit(JNIEnv* env, jclass clazz);
 
 static const JNINativeMethod gMethods[] = {
     { "nativeClassInit",     "()V", (void*)nativeClassInit },
-    { "native_setConfig",   "(Landroid/view/Surface;III)V", (void*)S3DView_setConfig},
-    { "native_getPrefLayout",   "()Lcom/ti/s3d/S3DView$Layout;", (void*)S3DView_getPrefLayout},
-    { "native_setWindowConfig",   "(Ljava/lang/String;III)V", (void*)S3DView_setWindowConfig}
+    { "native_setConfig",   "(Landroid/view/Surface;III)V", (void*)S3DView_setConfig },
+    { "native_setSurfaceViewCfg", "(III)V", (void*)S3DView_setSurfaceView },
+    { "native_getPrefLayout",   "()Lcom/ti/s3d/S3DView$Layout;", (void*)S3DView_getPrefLayout },
+    { "native_setWindowConfig",   "(Ljava/lang/String;III)V", (void*)S3DView_setWindowConfig }
 };
 
 static void nativeClassInit(JNIEnv* env, jclass clazz) {
