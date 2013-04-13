@@ -57,9 +57,6 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_WPAN_DEVICE := true
 
-BOARD_BLUEDROID_VENDOR_CONF := device/lge/p920/bluetooth/p920_vndcfg.txt
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
-
 BOARD_HAS_NO_MISC_PARTITION := true
 
 TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
