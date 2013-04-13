@@ -357,27 +357,21 @@ on fs
 
 #TIK_BlueTI
 #Bluetooth
-#    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
-#    insmod /system/lib/modules/rfcomm.ko
-#    insmod /system/lib/modules/btwilink.ko
-#    insmod /system/lib/modules/bnep.ko
-# UART2
+    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
+    insmod /system/lib/modules/rfcomm.ko
+    insmod /system/lib/modules/btwilink.ko
+    insmod /system/lib/modules/bnep.ko
+#TIK_End
+
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chmod 0660 /sys/class/rfkill/rfkill0/type
     chmod 0660 /sys/class/rfkill/rfkill1/state
     chmod 0660 /sys/class/rfkill/rfkill1/type
-    chmod 0660 /dev/ttyO1
+
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
-    chown bluetooth bluetooth /dev/ttyO1
-    
-    chmod 0664 /sys/devices/platform/bd_address/bdaddr_if
-    chown radio bluetooth /sys/devices/platform/bd_address/bdaddr_if
-
-    chown system system /sys/class/mhl_orient/mhl_dev_orient/MHL_orient
-
 
 #LGE_CHANGE_S, taewonee.kim@lge.com - TI wifi
     insmod /system/lib/modules/compat.ko
