@@ -4,6 +4,8 @@ $(call inherit-product-if-exists, vendor/lge/p920/p920-vendor.mk)
 
 $(call inherit-product, device/common/gps/gps_eu.mk)
 
+$(call inherit-product-if-exists, device/lge/p920/s3d/s3d-products.mk)
+
 DEVICE_PACKAGE_OVERLAYS += device/lge/p920/overlay
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
