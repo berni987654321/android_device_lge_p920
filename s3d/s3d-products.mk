@@ -6,7 +6,7 @@ PRODUCT_PACKAGES += \
 	libs3dview_jni
 
 PRODUCT_COPY_FILES += \
-	device/ti/common-open/s3d/frameworks/com.ti.s3d.xml:system/etc/permissions/com.ti.s3d.xml
+	device/lge/p920/s3d/frameworks/com.ti.s3d.xml:system/etc/permissions/com.ti.s3d.xml
 
 # S3D Apps
 PRODUCT_PACKAGES += \
