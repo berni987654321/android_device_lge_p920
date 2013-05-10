@@ -1,22 +1,18 @@
 import init.p920.usb.rc
 
 on early-init
-    mkdir /storage 0775 root system
-    mkdir /mnt/shell/sdcard 0700 shell shell
-    mkdir /storage/sdcard 0555 root root
-    mkdir /storage/sdcard1 0555 root root
+    mkdir /storage 0050 system sdcard_r
+    mkdir /storage/sdcard0 0000 system system
+    mkdir /storage/sdcard1 0000 system system
+    symlink /storage/sdcard0 /sdcard
 
-    export EXTERNAL_STORAGE /storage/sdcard1
-
-    # Support legacy paths
-    symlink /storage/sdcard /sdcard
-    symlink /storage/sdcard /mnt/sdcard
-    symlink /storage/sdcard /storage/sdcard0
 on init
 
 sysclktz 0
 
 loglevel 3
+
+    export EXTERNAL_STORAGE /storage/sdcard0
 
     wait /dev/block/mmcblk0p2
 
@@ -61,158 +57,193 @@ loglevel 3
     chown system system /sys/devices/platform/omap/omap_i2c.3/i2c-3/3-0039/interrupt_prox
     chown system system /sys/devices/platform/omap/omap_i2c.3/i2c-3/3-0039/proxidata
     chown system system /sys/devices/platform/omap/omap_i2c.3/i2c-3/3-0039/luxdata
+	
+###ICS V30A MOD defcomg
 
-    chown system system /sys/devices/platform/omapdss/display0/enabled
-    chown system system /sys/devices/platform/omapdss/display1/enabled
-    chown system system /sys/devices/platform/omapdss/display2/enabled
-    chown system system /sys/devices/platform/omapdss/display3/enabled
-    chown system system /sys/devices/platform/omapdss/display0/name
-    chown system system /sys/devices/platform/omapdss/display1/name
-    chown system system /sys/devices/platform/omapdss/display2/name
-    chown system system /sys/devices/platform/omapdss/display3/name
-    chown system system /sys/devices/platform/omapdss/overlay0/manager
-    chown system system /sys/devices/platform/omapdss/overlay1/manager
-    chown system system /sys/devices/platform/omapdss/overlay2/manager
-    chown system system /sys/devices/platform/omapdss/overlay3/manager
-    chown system system /sys/devices/platform/omapdss/overlay0/zorder
-    chown system system /sys/devices/platform/omapdss/overlay1/zorder
-    chown system system /sys/devices/platform/omapdss/overlay2/zorder
-    chown system system /sys/devices/platform/omapdss/overlay3/zorder
-    chown system system /sys/devices/platform/omapdss/overlay0/position
-    chown system system /sys/devices/platform/omapdss/overlay1/position
-    chown system system /sys/devices/platform/omapdss/overlay2/position
-    chown system system /sys/devices/platform/omapdss/overlay3/position
-    chown system system /sys/devices/platform/omapdss/overlay0/output_size
-    chown system system /sys/devices/platform/omapdss/overlay1/output_size
-    chown system system /sys/devices/platform/omapdss/overlay2/output_size
-    chown system system /sys/devices/platform/omapdss/overlay3/output_size
-    chown system system /sys/devices/platform/omapdss/overlay0/portrait_position
-    chown system system /sys/devices/platform/omapdss/overlay1/portrait_position
-    chown system system /sys/devices/platform/omapdss/overlay2/portrait_position
-    chown system system /sys/devices/platform/omapdss/overlay3/portrait_position
-    chown system system /sys/devices/platform/omapdss/overlay0/portrait_output_size
-    chown system system /sys/devices/platform/omapdss/overlay1/portrait_output_size
-    chown system system /sys/devices/platform/omapdss/overlay2/portrait_output_size
-    chown system system /sys/devices/platform/omapdss/overlay3/portrait_output_size
-    chown system system /sys/devices/platform/omapdss/overlay0/input_size
-    chown system system /sys/devices/platform/omapdss/overlay1/input_size
-    chown system system /sys/devices/platform/omapdss/overlay2/input_size
-    chown system system /sys/devices/platform/omapdss/overlay3/input_size
-    chown system system /sys/devices/platform/omapdss/overlay0/color_mode
-    chown system system /sys/devices/platform/omapdss/overlay1/color_mode
-    chown system system /sys/devices/platform/omapdss/overlay2/color_mode
-    chown system system /sys/devices/platform/omapdss/overlay3/color_mode
-    chown system system /sys/devices/platform/omapdss/manager0/name
-    chown system system /sys/devices/platform/omapdss/manager0/display
-    chown system system /sys/devices/platform/omapdss/manager0/trans_key_value
-    chown system system /sys/devices/platform/omapdss/manager0/trans_key_type
-    chown system system /sys/devices/platform/omapdss/manager0/trans_key_enabled
-    chown system system /sys/devices/platform/omapdss/manager1/name
-    chown system system /sys/devices/platform/omapdss/manager1/display
-    chown system system /sys/devices/platform/omapdss/manager1/trans_key_value
-    chown system system /sys/devices/platform/omapdss/manager1/trans_key_type
-    chown system system /sys/devices/platform/omapdss/manager1/trans_key_enabled
-    chown system system /sys/devices/platform/omapdss/manager2/name
-    chown system system /sys/devices/platform/omapdss/manager2/display
-    chown system system /sys/devices/platform/omapdss/manager2/trans_key_value
-    chown system system /sys/devices/platform/omapdss/manager2/trans_key_type
-    chown system system /sys/devices/platform/omapdss/manager2/trans_key_enabled
-    chown system system /sys/devices/platform/omapdss/overlay0/enabled
-    chown system system /sys/devices/platform/omapdss/overlay1/enabled
-    chown system system /sys/devices/platform/omapdss/overlay2/enabled
-    chown system system /sys/devices/platform/omapdss/overlay3/enabled
+    chown system graphics /sys/class/graphics/fb0/overlays
+    chown system graphics /sys/class/graphics/fb0/fit_to_screen
+    chown system graphics /sys/class/graphics/fb0/overlays_rotate
+	chown system graphics /sys/class/graphics/fb0/rotate
+	chown system graphics /sys/class/graphics/fb0/rotate_type
+	chown system graphics /sys/class/graphics/fb0/mirror
+	chown system graphics /sys/class/graphics/fb0/size
+    chown system graphics /sys/class/graphics/fb1/rotate
+	chown system graphics /sys/class/graphics/fb1/rotate_type
+	chown system graphics /sys/class/graphics/fb1/mirror
 
-    chown system system /sys/devices/platform/omapdss/display0/timings
-    chown system system /sys/devices/platform/omapdss/display1/timings
-    chown system system /sys/devices/platform/omapdss/display2/timings
-    chown system system /sys/devices/platform/omapdss/display3/timings
+    chown root graphics /dev/graphics/fb0
+    chown root graphics /dev/graphics/fb1
+    chmod 0775 /dev/graphics/fb0
+    chmod 0775 /dev/graphics/fb1
+	
+	#Overlay0
+	chown system system /sys/devices/platform/omapdss/overlay0/enabled
+    chown system system /sys/devices/platform/omapdss/overlay0/global_alpha
+	chown system system /sys/devices/platform/omapdss/overlay0/input_size
+	chown system system /sys/devices/platform/omapdss/overlay0/manager
+	chown system system /sys/devices/platform/omapdss/overlay0/output_size
+	chown system system /sys/devices/platform/omapdss/overlay0/position
+	chown system system /sys/devices/platform/omapdss/overlay0/pre_mult_alpha
+	chown system system /sys/devices/platform/omapdss/overlay0/screen_width
+	chown system system /sys/devices/platform/omapdss/overlay0/x_decim
+	chown system system /sys/devices/platform/omapdss/overlay0/y_decim
+	chown system system /sys/devices/platform/omapdss/overlay0/update_mode
+	
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/enabled
+    chmod 0777 /sys/devices/platform/omapdss/overlay0/global_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/input_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/manager
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/output_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/position
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/pre_mult_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/screen_width
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/x_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/y_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay0/update_mode
+	
+	#Overlay1
+	chown system system /sys/devices/platform/omapdss/overlay1/enabled
+    chown system system /sys/devices/platform/omapdss/overlay1/global_alpha
+	chown system system /sys/devices/platform/omapdss/overlay1/input_size
+	chown system system /sys/devices/platform/omapdss/overlay1/manager
+	chown system system /sys/devices/platform/omapdss/overlay1/output_size
+	chown system system /sys/devices/platform/omapdss/overlay1/position
+	chown system system /sys/devices/platform/omapdss/overlay1/pre_mult_alpha
+	chown system system /sys/devices/platform/omapdss/overlay1/screen_width
+	chown system system /sys/devices/platform/omapdss/overlay1/x_decim
+	chown system system /sys/devices/platform/omapdss/overlay1/y_decim
+	chown system system /sys/devices/platform/omapdss/overlay1/update_mode
+	
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/enabled
+    chmod 0777 /sys/devices/platform/omapdss/overlay1/global_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/input_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/manager
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/output_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/position
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/pre_mult_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/screen_width
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/x_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/y_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay1/update_mode
+	
+	#Overlay2
+	chown system system /sys/devices/platform/omapdss/overlay2/enabled
+    chown system system /sys/devices/platform/omapdss/overlay2/global_alpha
+	chown system system /sys/devices/platform/omapdss/overlay2/input_size
+	chown system system /sys/devices/platform/omapdss/overlay2/manager
+	chown system system /sys/devices/platform/omapdss/overlay2/output_size
+	chown system system /sys/devices/platform/omapdss/overlay2/position
+	chown system system /sys/devices/platform/omapdss/overlay2/pre_mult_alpha
+	chown system system /sys/devices/platform/omapdss/overlay2/screen_width
+	chown system system /sys/devices/platform/omapdss/overlay2/x_decim
+	chown system system /sys/devices/platform/omapdss/overlay2/y_decim
+	chown system system /sys/devices/platform/omapdss/overlay2/update_mode
+	
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/enabled
+    chmod 0777 /sys/devices/platform/omapdss/overlay2/global_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/input_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/manager
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/output_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/position
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/pre_mult_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/screen_width
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/x_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/y_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay2/update_mode
+	
+	#OverLay3
+	chown system system /sys/devices/platform/omapdss/overlay3/enabled
+    chown system system /sys/devices/platform/omapdss/overlay3/global_alpha
+	chown system system /sys/devices/platform/omapdss/overlay3/input_size
+	chown system system /sys/devices/platform/omapdss/overlay3/manager
+	chown system system /sys/devices/platform/omapdss/overlay3/output_size
+	chown system system /sys/devices/platform/omapdss/overlay3/position
+	chown system system /sys/devices/platform/omapdss/overlay3/pre_mult_alpha
+	chown system system /sys/devices/platform/omapdss/overlay3/screen_width
+	chown system system /sys/devices/platform/omapdss/overlay3/x_decim
+	chown system system /sys/devices/platform/omapdss/overlay3/y_decim
+	chown system system /sys/devices/platform/omapdss/overlay3/update_mode
+	
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/enabled
+    chmod 0777 /sys/devices/platform/omapdss/overlay3/global_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/input_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/manager
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/output_size
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/position
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/pre_mult_alpha
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/screen_width
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/x_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/y_decim
+	chmod 0777 /sys/devices/platform/omapdss/overlay3/update_mode
+	
+	
+	#Display0
+    chown system system /sys/devices/platform/omapdss/display0/3D_display
+    chown system system /sys/devices/platform/omapdss/display0/backlight
+	chown system system /sys/devices/platform/omapdss/display0/cabc_available_modes
+	chown system system /sys/devices/platform/omapdss/display0/cabc_mode
+	chown system system /sys/devices/platform/omapdss/display0/enabled
+	chown system system /sys/devices/platform/omapdss/display0/esd_interval
+	chown system system /sys/devices/platform/omapdss/display0/tear_elim
+	chown system system /sys/devices/platform/omapdss/display0/timings
+	chown system system /sys/devices/platform/omapdss/display0/uevent
+	chown system system /sys/devices/platform/omapdss/display0/ulps
+	chown system system /sys/devices/platform/omapdss/display0/ulps_timeout
+	chown system system /sys/devices/platform/omapdss/display0/update_mode
+	chown system system /sys/devices/platform/omapdss/display0/wss
+	
+	chmod 0777 /sys/devices/platform/omapdss/display1/3D_display
+    chmod 0777 /sys/devices/platform/omapdss/display1/backlight
+	chmod 0777 /sys/devices/platform/omapdss/display1/cabc_available_modes
+    chmod 0777 /sys/devices/platform/omapdss/display1/cabc_mode
+	chmod 0777 /sys/devices/platform/omapdss/display1/enabled
+    chmod 0777 /sys/devices/platform/omapdss/display1/s3d_type
+	chmod 0777 /sys/devices/platform/omapdss/display1/esd_interval
+    chmod 0777 /sys/devices/platform/omapdss/display1/tear_elim
+	chmod 0777 /sys/devices/platform/omapdss/display1/timings
+    chmod 0777 /sys/devices/platform/omapdss/display1/ulps
+	chmod 0777 /sys/devices/platform/omapdss/display1/ulps_timeout
+    chmod 0777 /sys/devices/platform/omapdss/display1/update_mode
+	chmod 0777 /sys/devices/platform/omapdss/display1/wss
+	
+	#HDMI
+	chown system system /sys/devices/platform/omapdss/display1/enabled
+	chown system system /sys/devices/platform/omapdss/display1/bestScore
+	chown system system /sys/devices/platform/omapdss/display1/deepcolor
+	chown system system /sys/devices/platform/omapdss/display1/edid
+	chown system system /sys/devices/platform/omapdss/display1/mirror
+	chown system system /sys/devices/platform/omapdss/display1/rotate
+	chown system system /sys/devices/platform/omapdss/display1/s3d_enable
+	chown system system /sys/devices/platform/omapdss/display1/s3d_type
+	chown system system /sys/devices/platform/omapdss/display1/tear_elim
+	chown system system /sys/devices/platform/omapdss/display1/timings
+	chown system system /sys/devices/platform/omapdss/display1/uevent
+	chown system system /sys/devices/platform/omapdss/display1/update_mode
+	chown system system /sys/devices/platform/omapdss/display1/wss
+	
+	chmod 0777 /sys/devices/platform/omapdss/display1/enabled
+    chmod 0777 /sys/devices/platform/omapdss/display1/bestScore
 
-    chown system system /sys/devices/platform/omapfb/graphics/fb0/overlays
-    chown system system /sys/devices/platform/omapfb/graphics/fb0/overlays_rotate
-    chown system system /sys/devices/platform/omapfb/graphics/fb1/overlays
-    chown system system /sys/devices/platform/omapfb/graphics/fb1/overlays_rotate
+	chmod 0777 /sys/devices/platform/omapdss/display1/deepcolor
+    chmod 0777 /sys/devices/platform/omapdss/display1/edid
+	chmod 0777 /sys/devices/platform/omapdss/display1/mirror
+    chmod 0777 /sys/devices/platform/omapdss/display1/rotate
+	chmod 0777 /sys/devices/platform/omapdss/display1/s3d_enable
+    chmod 0777 /sys/devices/platform/omapdss/display1/s3d_type
+	chmod 0777 /sys/devices/platform/omapdss/display1/tear_elim
+    chmod 0777 /sys/devices/platform/omapdss/display1/uevent
+	chmod 0777 /sys/devices/platform/omapdss/display1/update_mode
+    chmod 0777 /sys/devices/platform/omapdss/display1/wss
+	
+	# change permissions for LCD Gamma Tuning
+    chown system radio /sys/devices/omapdss/display0/gamma_tuning
+    chmod 0660 /sys/devices/omapdss/display0/gamma_tuning
+	
+	chown system system /sys/class/mhl_orient/mhl_dev_orient/MHL_orient
+    chmod 0660 /sys/class/mhl_orient/mhl_dev_orient/MHL_orient
 
-    chown system system /sys/devices/platform/omapdss/display1/hdmi_out
-    chown system system /sys/devices/platform/omapdss/display1/hdmi_source
-    chown system system /sys/devices/platform/omapdss/display1/hdmi_key
-    chown system system /sys/devices/platform/omapdss/display1/hdmi_drm_lock
-    chown system system /sys/devices/platform/omapdss/display1/hdmi_drm_usr_sel
-    chown system system /sys/devices/platform/omapdss/display1/custom_edid_timing
-    chown system system /sys/devices/platform/omapdss/display1/hpd_enabled
-
-    chown system system /sys/devices/platform/omapdss/display0/sgx_manual_recovery
-    chmod 0775 /sys/devices/platform/omapdss/display0/sgx_manual_recovery
-    # change permissions for overlay managers and display devices
-    chmod 0775 /sys/devices/platform/omapdss/display0/enabled
-    chmod 0775 /sys/devices/platform/omapdss/display1/enabled
-    chmod 0775 /sys/devices/platform/omapdss/display2/enabled
-    chmod 0775 /sys/devices/platform/omapdss/display3/enabled
-    chmod 0775 /sys/devices/platform/omapdss/display0/name
-    chmod 0775 /sys/devices/platform/omapdss/display1/name
-    chmod 0775 /sys/devices/platform/omapdss/display2/name
-    chmod 0775 /sys/devices/platform/omapdss/display3/name
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/manager
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/manager
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/manager
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/manager
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/zorder
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/zorder
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/zorder
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/zorder
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/position
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/position
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/position
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/position
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/portrait_position
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/portrait_position
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/portrait_position
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/portrait_position
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/portrait_output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/portrait_output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/portrait_output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/portrait_output_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/input_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/input_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/input_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/input_size
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/color_mode
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/color_mode
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/color_mode
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/color_mode
-    # change permissions for manager tranparency parameters
-    chmod 0775 /sys/devices/platform/omapdss/manager0/name
-    chmod 0775 /sys/devices/platform/omapdss/manager0/display
-    chmod 0775 /sys/devices/platform/omapdss/manager0/trans_key_value
-    chmod 0775 /sys/devices/platform/omapdss/manager0/trans_key_type
-    chmod 0775 /sys/devices/platform/omapdss/manager0/trans_key_enabled
-    chmod 0775 /sys/devices/platform/omapdss/manager1/name
-    chmod 0775 /sys/devices/platform/omapdss/manager1/display
-    chmod 0775 /sys/devices/platform/omapdss/manager1/trans_key_value
-    chmod 0775 /sys/devices/platform/omapdss/manager1/trans_key_type
-    chmod 0775 /sys/devices/platform/omapdss/manager1/trans_key_enabled
-    chmod 0775 /sys/devices/platform/omapdss/manager2/name
-    chmod 0775 /sys/devices/platform/omapdss/manager2/display
-    chmod 0775 /sys/devices/platform/omapdss/manager2/trans_key_value
-    chmod 0775 /sys/devices/platform/omapdss/manager2/trans_key_type
-    chmod 0775 /sys/devices/platform/omapdss/manager2/trans_key_enabled
-    chmod 0775 /sys/devices/platform/omapdss/overlay0/enabled
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/enabled
-    chmod 0775 /sys/devices/platform/omapdss/overlay2/enabled
-    chmod 0775 /sys/devices/platform/omapdss/overlay3/enabled
-    # change permissions for display timings to get the resolutions
-    chmod 0775 /sys/devices/platform/omapdss/display0/timings
-    chmod 0775 /sys/devices/platform/omapdss/display1/timings
-    chmod 0775 /sys/devices/platform/omapdss/display2/timings
-    chmod 0775 /sys/devices/platform/omapdss/display3/timings
-    #change framebuffer permission
-    chmod 0775 /sys/devices/platform/omapfb/graphics/fb0/overlays
-    chmod 0775 /sys/devices/platform/omapfb/graphics/fb0/overlays_rotate
-    chmod 0775 /sys/devices/platform/omapfb/graphics/fb1/overlays
-    chmod 0775 /sys/devices/platform/omapfb/graphics/fb1/overlays_rotate
+####ICS V30A MOD defcomg
+ 
     #change permissions for LCD backlightness
     chmod 0664 /sys/devices/platform/i2c_omap.2/i2c-2/2-0036/brightness
     #AT command AT%LEDON
@@ -228,106 +259,6 @@ loglevel 3
 #LGE_KERNEL_MUX START  jongho3.lee@lge.com
     chown root  radio /sys/class/power_supply/battery/gauge_control
     chown root  radio /sys/class/power_supply/battery/voltage_now
-
-# Disable fb1 wonki.choi@lge.com
-    write /sys/devices/platform/omapfb/graphics/fb1/overlays ""
-    write /sys/devices/platform/omapdss/overlay1/enabled 0
-#    write /sys/devices/platform/omapdss/overlay1/manager "2lcd"
-# Seting for HDMI plug-in wonki.choi@lge.com
-    write /sys/devices/platform/omapdss/display1/enabled 0
-    write /sys/devices/platform/omapdss/display1/hpd_enabled 1
-# setting HDMI Routing in system
-    write /sys/devices/platform/omapdss/overlay3/manager "tv"
-    write /sys/devices/platform/omapdss/overlay3/zorder 2
-
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_out
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_source
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_key
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_rotation
-    chmod 0775 /sys/devices/platform/omapdss/overlay1/input_size
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_3d_enable
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_3d_type
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_drm_lock
-    chmod 0775 /sys/devices/platform/omapdss/display1/hdmi_drm_usr_sel
-    chmod 0775 /sys/devices/platform/omapdss/display1/custom_edid_timing
-    chmod 0775 /sys/devices/platform/omapdss/display1/hpd_enabled
-
- #HDMI device
-
- chown system system /sys/devices/platform/omapdss/overlay0/req_enabled
- chown system system /sys/devices/platform/omapdss/overlay0/req_rotation
- chown system system /sys/devices/platform/omapdss/overlay0/req_position
- chown system system /sys/devices/platform/omapdss/overlay0/req_out_size
- chown system system /sys/devices/platform/omapdss/overlay0/req_manager
- chown system system /sys/devices/platform/omapdss/overlay0/req_request
- chown system system /sys/devices/platform/omapdss/overlay0/req_global_alpha
- chown system system /sys/devices/platform/omapdss/overlay0/req_zorder
-
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_enabled
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_rotation
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_position
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_out_size
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_manager
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_request
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_global_alpha
- chmod 0775 /sys/devices/platform/omapdss/overlay0/req_zorder
-
- chown system system /sys/devices/platform/omapdss/overlay1/req_enabled
- chown system system /sys/devices/platform/omapdss/overlay1/req_rotation
- chown system system /sys/devices/platform/omapdss/overlay1/req_position
- chown system system /sys/devices/platform/omapdss/overlay1/req_out_size
- chown system system /sys/devices/platform/omapdss/overlay1/req_manager
- chown system system /sys/devices/platform/omapdss/overlay1/req_request
- chown system system /sys/devices/platform/omapdss/overlay1/req_global_alpha
- chown system system /sys/devices/platform/omapdss/overlay1/req_zorder
-
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_enabled
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_rotation
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_position
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_out_size
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_manager
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_request
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_global_alpha
- chmod 0775 /sys/devices/platform/omapdss/overlay1/req_zorder
-
- chown system system /sys/devices/platform/omapdss/overlay2/req_enabled
- chown system system /sys/devices/platform/omapdss/overlay2/req_rotation
- chown system system /sys/devices/platform/omapdss/overlay2/req_position
- chown system system /sys/devices/platform/omapdss/overlay2/req_out_size
- chown system system /sys/devices/platform/omapdss/overlay2/req_manager
- chown system system /sys/devices/platform/omapdss/overlay2/req_request
- chown system system /sys/devices/platform/omapdss/overlay2/req_global_alpha
- chown system system /sys/devices/platform/omapdss/overlay2/req_zorder
-
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_enabled
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_rotation
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_position
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_out_size
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_manager
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_request
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_global_alpha
- chmod 0775 /sys/devices/platform/omapdss/overlay2/req_zorder
-
- chown system system /sys/devices/platform/omapdss/overlay3/req_enabled
- chown system system /sys/devices/platform/omapdss/overlay3/req_rotation
- chown system system /sys/devices/platform/omapdss/overlay3/req_position
- chown system system /sys/devices/platform/omapdss/overlay3/req_out_size
- chown system system /sys/devices/platform/omapdss/overlay3/req_manager
- chown system system /sys/devices/platform/omapdss/overlay3/req_request
- chown system system /sys/devices/platform/omapdss/overlay3/req_global_alpha
- chown system system /sys/devices/platform/omapdss/overlay3/req_zorder
-
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_enabled
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_rotation
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_position
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_out_size
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_manager
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_request
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_global_alpha
- chmod 0775 /sys/devices/platform/omapdss/overlay3/req_zorder
-
-# Enable hotplug detection for HDMI
-    write /sys/devices/platform/omapdss/display1/hpd_enabled 1
 
 
 ### END OF LGE STUFFS
@@ -357,16 +288,10 @@ on fs
 
 #TIK_BlueTI
 #Bluetooth
-#    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
-#    insmod /system/lib/modules/rfcomm.ko
-#    insmod /system/lib/modules/btwilink.ko
-#    insmod /system/lib/modules/bnep.ko
-	insmod /system/lib/modules/tty_hci.ko
-
-# UART device
-    chmod 0660 /dev/tty01
-    chown bluetooth net_bt_stack /dev/tty01
-
+    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
+    insmod /system/lib/modules/rfcomm.ko
+    insmod /system/lib/modules/btwilink.ko
+    insmod /system/lib/modules/bnep.ko
 #TIK_End
 
     chmod 0660 /sys/class/rfkill/rfkill0/state
