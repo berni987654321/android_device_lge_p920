@@ -288,10 +288,17 @@ on fs
 
 #TIK_BlueTI
 #Bluetooth
-    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
-    insmod /system/lib/modules/rfcomm.ko
-    insmod /system/lib/modules/btwilink.ko
-    insmod /system/lib/modules/bnep.ko
+#    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
+#    insmod /system/lib/modules/rfcomm.ko
+#    insmod /system/lib/modules/btwilink.ko
+#    insmod /system/lib/modules/bnep.ko
+    insmod /system/lib/modules/tty_hci.ko
+
+
+# UART device
+    chmod 0660 /dev/tty01
+    chown bluetooth net_bt_stack /dev/tty01
+
 #TIK_End
 
     chmod 0660 /sys/class/rfkill/rfkill0/state
