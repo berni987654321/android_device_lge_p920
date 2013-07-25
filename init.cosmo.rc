@@ -11,7 +11,7 @@ on early-init
     # Support legacy paths
     symlink /storage/sdcard /sdcard
     symlink /storage/sdcard /mnt/sdcard
-    symlink /storage/sdcard /storage/sdcard0
+    symlink /storage/sdcard /smkditorage/sdcard0
 on init
 
 sysclktz 0
@@ -383,6 +383,8 @@ on fs
     insmod /system/lib/modules/compat.ko
     insmod /system/lib/modules/cfg80211.ko
     insmod /system/lib/modules/mac80211.ko
+    insmod /system/lib/modules/wlcore.ko
+    insmod /system/lib/modules/wl18xx.ko
     insmod /system/lib/modules/wl12xx.ko #debug_level=0x63c00
 #LGE_CHANGE_E, taewonee.kim@lge.com - TI wifi
 
@@ -424,7 +426,7 @@ on post-fs-data
     chown wifi radio /data/misc/wifi
     mkdir /data/misc/dhcp 0777 dhcp dhcp
 # LGE_CHANGE_E Wi-Fi jiwoong.eom@lge.com 20101124 for SoftAP
-    mkdir /data/misc/wifi/sockets 0771 wifi wifi
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
 
     setprop vold.post_fs_data_done 1
 
