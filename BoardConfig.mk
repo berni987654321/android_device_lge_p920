@@ -61,7 +61,9 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
 
 BOARD_HAS_NO_MISC_PARTITION := true
 
-TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
+#TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
+TARGET_RECOVERY_FSTAB = device/lge/p920/fstab.cosmo
+RECOVERY_FSTAB_VERSION = 2 
 
 TARGET_BOOTLOADER_BOARD_NAME := p920
 
@@ -121,9 +123,40 @@ ENHANCED_DOMX := true
 
 BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/lge/p920/vibrator.c
 
-COMMON_GLOBAL_CFLAGS += -DICS_AUDIO_BLOB -DICS_CAMERA_BLOB
+COMMON_GLOBAL_CFLAGS += -ICS_AUDIO_BLOB -DICS_CAMERA_BLOB
 TARGET_SPECIFIC_HEADER_PATH := device/lge/p920/src-headers
 PRODUCT_VENDOR_KERNEL_HEADERS := device/lge/p920/kernel-headers
 
 COMMON_GLOBAL_CFLAGS += -DBOARD_CHARGING_CMDLINE_NAME='"chg"' -DBOARD_CHARGING_CMDLINE_VALUE='"4"'
 
+# Recovery: set depending on recovery being built for. (CWM or TWRP)
+# both init scripts can be found in the recovery folder
+TARGET_RECOVERY_INITRC := device/lge/p920/init.cosmo.rc
+
+# TWRP specific build flags
+#BOARD_USE_CUSTOM_RECOVERY_FONT:= \"roboto_15x24.h\"
+DEVICE_RESOLUTION := 480x800
+TW_INTERNAL_STORAGE_PATH := "/sdcard"
+TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
+TW_EXTERNAL_STORAGE_PATH := "/sdcard/_ExternalSD"
+TW_EXTERNAL_STORAGE_MOUNT_POINT := "external_sdcard"
+#RECOVERY_SDCARD_ON_DATA := false
+#BOARD_HAS_NO_REAL_SDCARD := false
+#PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+#TW_NO_USB_STORAGE := true
+#TWRP_EVENT_LOGGING := false
+
+#TW_INCLUDE_CRYPTO := true
+#TW_INCLUDE_CRYPTO_SAMSUNG := true
+#TW_CRYPTO_FS_TYPE := "ext4"
+#TW_CRYPTO_REAL_BLKDEV := "/dev/block/mmcblk0p16"
+#TW_CRYPTO_MNT_POINT := "/data"
+#TW_CRYPTO_FS_OPTIONS := "noatime,nosuid,nodev,discard,noauto_da_alloc,journal_async_commit,errors=panic wait,check,encryptable=footer"
+#TW_CRYPTO_FS_FLAGS := "0x00000406"
+#TW_CRYPTO_KEY_LOC := "footer"
+#TW_BRIGHTNESS_PATH := "/sys/devices/platform/s5p-dsim.0/s6evr02/backlight/panel/brightness"
+#TW_MAX_BRIGHTNESS := 255
+#TARGET_USERIMAGES_USE_EXT4 := true
+#TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/virtual/android_usb/android0/f_mass_storage/lun0/file
+#TW_INCLUDE_FB2PNG := true
+TW_FLASH_FROM_STORAGE := true
