@@ -13,6 +13,8 @@ on early-init
     symlink /storage/sdcard /mnt/sdcard
     symlink /storage/sdcard /smkditorage/sdcard0
 on init
+	export PATH /sbin
+	export LD_LIBRARY_PATH .:/sbin
 
 sysclktz 0
 
