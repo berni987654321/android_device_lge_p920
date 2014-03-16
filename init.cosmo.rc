@@ -526,11 +526,12 @@ service lgcpversion /system/bin/lgcpversion
     user root
     oneshot
 
-service charger /charger
-    class charger
 service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
     disabled
+
+service charger /charger
+    class charger
     user root
     group root
     oneshot
