@@ -22,12 +22,12 @@ BOARD_UBOOT_ENTRY := 0x80008000
 BOARD_UBOOT_LOAD := 0x80008000
 TARGET_BOOTLOADER_BOARD_NAME := p920
 BOARD_CUSTOM_BOOTIMG_MK := device/lge/p920/uboot-bootimg.mk
+SKIP_SET_METADATA := true
+BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
 ###################################################################
 
 #####################Kernel##############################
 # Try to build the kernel
-BUILD_KERNEL := true
-ifdef BUILD_KERNEL
 TARGET_KERNEL_CONFIG := cyanogenmod_p920_defconfig
 TARGET_KERNEL_SOURCE := kernel/lge/omap4-common
 
@@ -48,7 +48,6 @@ KERNEL_SGX_MODULES:
 	mv $(OUT)/target/*sgx540_120.ko $(TARGET_OUT)/modules/
 
 TARGET_KERNEL_MODULES := KERNEL_SGX_MODULES KERNEL_WL12XX_MODULES
-endif
 ###############################################################################
 
 ###########################BOARDSTUFF######################################
@@ -57,6 +56,10 @@ BOARD_WPAN_DEVICE := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
 BOARD_NEEDS_CUTILS_LOG := true
 BOARD_USES_AUDIO_LEGACY := true
+### Kitkat Specific
+# Disable SELinux
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.boot.selinux=disabled
 ###GL
 TARGET_USES_GL_VENDOR_EXTENSIONS := false
 USE_OPENGL_RENDERER := true
@@ -98,6 +101,9 @@ ifdef OMAP_ENHANCEMENT
 COMMON_GLOBAL_CFLAGS += -DOMAP_ENHANCEMENT -DTARGET_OMAP4 -DOMAP_ENHANCEMENT_CPCAM -DOMAP_ENHANCEMENT_VTC
 endif
 ENHANCED_DOMX := true
+
+BOARD_RIL_CLASS := ../../../device/lge/p920/ril/
+BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/lge/p920/vibrator.c
 ############################################################################
 
 ################RECOVERY####################################
@@ -105,21 +111,16 @@ ENHANCED_DOMX := true
 BOARD_RECOVERY_ALWAYS_WIPES := true
 #TARGET_RECOVERY_PRE_COMMAND := "/system/bin/setup-recovery"
 #BOARD_TOUCH_RECOVERY := true
-#TARGET_RECOVERY_FSTAB = device/lge/p920/cosmo.fstab
+#TARGET_RECOVERY_FSTAB = device/lge/p920/fstab.cosmo
 #RECOVERY_FSTAB_VERSION = 2 
 DEVICE_RESOLUTION := 480x800
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
 BOARD_RECOVERY_SWIPE := true
-BOARD_UMS_LUNFILE := "/sys/devices/virtual/android_usb/android0/f_mass_storage/lun%d/file"
+#BOARD_UMS_LUNFILE := "/sys/devices/virtual/android_usb/android0/f_mass_storage/lun%d/file"
 #TWRP
-TW_NO_REBOOT_BOOTLOADER := true
+#TW_NO_REBOOT_BOOTLOADER := true
 ############################################################
-
-# Radio fixes
-BOARD_RIL_CLASS := /../../device/lge/p920/ril/
-BOARD_HAS_VIBRATOR_IMPLEMENTATION := /../../device/lge/p920/vibrator.c
-
 COMMON_GLOBAL_CFLAGS += -ICS_AUDIO_BLOB -DICS_CAMERA_BLOB
 TARGET_SPECIFIC_HEADER_PATH := device/lge/p920/src-headers
 PRODUCT_VENDOR_KERNEL_HEADERS := device/lge/p920/kernel-headers
