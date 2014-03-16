@@ -3,8 +3,12 @@ import init.p920.usb.rc
 on early-init
     mkdir /storage 0775 root system
     mkdir /mnt/shell/sdcard 0700 shell shell
-    mkdir /storage/sdcard 0555 root root
-    mkdir /storage/sdcard1 0555 root root
+    
+
+# KitKat SDCARD
+    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+    mkdir /storage/sdcard0 0700 root sdcard_r
+    mkdir /storage/sdcard1 0700 root sdcard_r
 
     export EXTERNAL_STORAGE /storage/sdcard1
 
@@ -524,6 +528,9 @@ service lgcpversion /system/bin/lgcpversion
 
 service charger /charger
     class charger
+service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
+    class late_start
+    disabled
     user root
     group root
     oneshot
