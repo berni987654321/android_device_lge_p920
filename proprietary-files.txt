@@ -1,14 +1,6 @@
-etc/wifi/firmware.bin
-etc/wifi/softap/firmware_ap.bin
-etc/firmware/fm_rx_init_1273.2.bts
-etc/firmware/TIInit_7.2.31.bts
-etc/firmware/fmc_init_1273.2.bts
-etc/firmware/fm_tx_init_1273.2.bts
 etc/cert/lge.cer
 lib/libril.so
-lib/libacousticengine.so
 lib/hw/audio.primary.omap4.so
-lib/hw/gralloc.omap4.so
 lib/hw/lights.omap4.so
 lib/hw/gps.omap4.so
 lib/hw/sensors.omap4.so
@@ -20,10 +12,7 @@ lib/libmpl.so
 lib/libmllite.so
 lib/libmlplatform.so
 lib/lge-ril.so
-lib/libaudiomodemgeneric.so
-lib/libmmclient.so
 lib/libtinyalsa.so
-lib/libasound.so
 vendor/bin/pvrsrvinit
 vendor/bin/pvrsrvinit_SGX540_120
 vendor/firmware/ducati-m3.bin
@@ -41,10 +30,8 @@ vendor/lib/hw/gralloc.omap4.so
 vendor/lib/libpvr2d_SGX540_120.so
 vendor/lib/libWVStreamControlAPI_L3.so
 vendor/lib/liblvvetx.so
-vendor/lib/libsmapi.so
 vendor/lib/libsrv_um_SGX540_120.so
 vendor/lib/libusc_SGX540_120.so
-vendor/lib/libtf_crypto_sst.so
 vendor/lib/egl/libGLESv2_POWERVR_SGX540_120.so
 vendor/lib/egl/libEGL_POWERVR_SGX540_120.so
 vendor/lib/egl/libGLESv1_CM_POWERVR_SGX540_120.so
