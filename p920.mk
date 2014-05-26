@@ -65,8 +65,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps_brcm_conf.xml:system/etc/gps_brcm_conf.xml
 
 ## Camera
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/libcameraservice.so:system/lib/libcameraservice.so
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/prebuilt/libcameraservice.so:system/lib/libcameraservice.so
 
 $(call inherit-product, build/target/product/full.mk)
 
