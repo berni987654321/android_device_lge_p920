@@ -3,22 +3,16 @@ import init.p920.usb.rc
 on early-init
     mkdir /storage 0775 root system
     mkdir /mnt/shell/sdcard 0700 shell shell
-    
-
-# KitKat SDCARD
-    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
-    mkdir /storage/sdcard0 0700 root sdcard_r
-    mkdir /storage/sdcard1 0700 root sdcard_r
+    mkdir /storage/sdcard 0555 root root
+    mkdir /storage/sdcard1 0555 root root
 
     export EXTERNAL_STORAGE /storage/sdcard1
 
     # Support legacy paths
     symlink /storage/sdcard /sdcard
     symlink /storage/sdcard /mnt/sdcard
-    symlink /storage/sdcard /smkditorage/sdcard0
+    symlink /storage/sdcard /storage/sdcard0
 on init
-	export PATH /sbin
-	export LD_LIBRARY_PATH .:/sbin
 
 sysclktz 0
 
@@ -347,7 +341,7 @@ loglevel 3
     chmod 0644 /dev/xt_qtaguid
 
 on fs
-    mount_all ./fstab.cosmo
+    mount_all /fstab.lgep920board
 
     ## The sensor blobs use this for calibration
     mkdir /log
@@ -526,12 +520,9 @@ service lgcpversion /system/bin/lgcpversion
     user root
     oneshot
 
-service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
-    class late_start
-    disabled
-
 service charger /charger
     class charger
     user root
     group root
     oneshot
+
