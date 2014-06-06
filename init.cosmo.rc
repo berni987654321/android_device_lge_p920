@@ -1,26 +1,8 @@
 import init.p920.usb.rc
+import init.storage.rc
 
-on early-init
-    mkdir /storage 0775 root system
-    mkdir /mnt/shell/sdcard 0700 shell shell
-    mkdir /storage/sdcard 0555 root root
-    mkdir /storage/sdcard1 0555 root root
-
-    export EXTERNAL_STORAGE /storage/sdcard1
-
-    # Support legacy paths
-    symlink /storage/sdcard /sdcard
-    symlink /storage/sdcard /mnt/sdcard
-    symlink /storage/sdcard /storage/sdcard0
-on init
-
-sysclktz 0
-
-loglevel 3
-
-    wait /dev/block/mmcblk0p2
-
-    mkdir /misc 0771 system misc
+on post-fs-data
+	mkdir /misc 0771 system misc
     mkdir /lgdrm 0770 system system
 
     mkdir /sqlite_stmt_journals 01777 root root
@@ -340,56 +322,6 @@ loglevel 3
 # This is needed by any process that uses socket tagging.
     chmod 0644 /dev/xt_qtaguid
 
-on fs
-    mount_all /fstab.lgep920board
-
-    ## The sensor blobs use this for calibration
-    mkdir /log
-    symlink /data/misc /log/misc
-
-# Boost the CPU for 60 sec for boot optimization
-    write /sys/devices/system/cpu/cpufreq/hotplug/boost_timeout 60000000
-    write /sys/devices/system/cpu/cpu0/cpufreq/boost_cpufreq 1
-    write /sys/devices/system/cpu/cpufreq/hotplug/boost_timeout 3000000
-
-    #mount ext3 /dev/block/mmcblk0p11 /lgdrm nosuid nodev noatime data=ordered
-
-
-#TIK_BlueTI
-#Bluetooth
-#    insmod /system/lib/modules/bluetooth.ko # force_acl_master=1 enable_mgmt=1 enable_le=1
-#    insmod /system/lib/modules/rfcomm.ko
-#    insmod /system/lib/modules/btwilink.ko
-#    insmod /system/lib/modules/bnep.ko
-	insmod /system/lib/modules/tty_hci.ko
-
-# UART device
-    chmod 0660 /dev/tty01
-    chown bluetooth net_bt_stack /dev/tty01
-
-#TIK_End
-
-    chmod 0660 /sys/class/rfkill/rfkill0/state
-    chmod 0660 /sys/class/rfkill/rfkill0/type
-    chmod 0660 /sys/class/rfkill/rfkill1/state
-    chmod 0660 /sys/class/rfkill/rfkill1/type
-
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
-
-#LGE_CHANGE_S, taewonee.kim@lge.com - TI wifi
-    insmod /system/lib/modules/compat.ko
-    insmod /system/lib/modules/cfg80211.ko
-    insmod /system/lib/modules/mac80211.ko
-    insmod /system/lib/modules/wlcore.ko
-    insmod /system/lib/modules/wl18xx.ko
-    insmod /system/lib/modules/wl12xx.ko #debug_level=0x63c00
-#LGE_CHANGE_E, taewonee.kim@lge.com - TI wifi
-
-
-on post-fs
 #LGE_CHANGE_S [taehwan.kim@lge.com] 2010-05-04, 27.8.2 patch., 27.10.1 patch
 # power management
     # mount debugfs
@@ -412,11 +344,17 @@ on post-fs
     write /debug/pm_debug/enable_off_mode 1
 #LGE_CHANGE_E [kibum.lee@lge.com] 2010-12-09, 27.8.2 patch, 27.10.1 patch
 
-on post-fs-data
-    chown radio radio /dev/block/mmcblk0p2
+chown radio radio /dev/block/mmcblk0p2
     chown radio radio /dev/block/mmcblk0p3
     chmod 0660 /dev/block/mmcblk0p2
     chmod 0660 /dev/block/mmcblk0p3
+
+# FUSE property value
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    #mkdir /data/media 0775 media_rw media_rw
+    #chown media_rw media_rw /data/media
+
+
 
 # LGE_CHANGE_S Wi-Fi jiwoong.eom@lge.com 20101124 for SoftAP
     mkdir /data/misc/wifi/softap 0771 wifi wifi
@@ -436,6 +374,12 @@ on post-fs-data
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
 on boot
+
+	#chmod 0666 /dev/pvrsrvkm
+	# change permissions for Tiler driver
+    #chmod 0777 /dev/tiler
+    #chmod 0777 /dev/dmm
+
 ### LGE GPS
 # gps permissions
     chown system system /sys/devices/platform/gps_gpio/poweron
@@ -525,4 +469,5 @@ service charger /charger
     user root
     group root
     oneshot
+
 
