@@ -21,7 +21,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.cosmo.rc:root/init.lgep920board.rc \
     $(LOCAL_PATH)/init.p920.usb.rc:root/init.p920.usb.rc \
     $(LOCAL_PATH)/ueventd.lgep920board.rc:root/ueventd.lgep920board.rc \
-    $(LOCAL_PATH)/fstab.cosmo:root/fstab.lgep920board
+    $(LOCAL_PATH)/fstab.cosmo:root/fstab.lgep920board \
+	$(LOCAL_PATH)/init.storage.rc:root/init.storage.rc
 
 ## Wifi
 PRODUCT_COPY_FILES += \
