@@ -1,5 +1,6 @@
 import init.p920.usb.rc
 import init.storage.rc
+import init.wifi.bt.rc
 
 on post-fs-data
 	mkdir /misc 0771 system misc
@@ -17,6 +18,11 @@ on post-fs-data
     chmod 0777 /dev/pcmC0D0p
     chmod 0777 /dev/controlC0
     chmod 0777 /dev/timer
+
+	# Log Service
+    mkdir /data/logger 0775 system system
+    chown system system /data/logger
+    chmod 0771 /data/logger
 
 ### LGE STUFFS
     chown root radio /proc/cmdline
@@ -355,17 +361,6 @@ chown radio radio /dev/block/mmcblk0p2
     #chown media_rw media_rw /data/media
 
 
-
-# LGE_CHANGE_S Wi-Fi jiwoong.eom@lge.com 20101124 for SoftAP
-    mkdir /data/misc/wifi/softap 0771 wifi wifi
-# LGE_CHANGE_E Wi-Fi jiwoong.eom@lge.com 20101124 for SoftAP
-    # Copying hostapd.conf (WLAN soft AP)
-    copy /system/etc/wifi/softap/hostapd.conf /data/misc/wifi/hostapd.conf
-    chown wifi radio /data/misc/wifi
-    mkdir /data/misc/dhcp 0777 dhcp dhcp
-# LGE_CHANGE_E Wi-Fi jiwoong.eom@lge.com 20101124 for SoftAP
-    mkdir /data/misc/wifi/sockets 0770 wifi wifi
-
     setprop vold.post_fs_data_done 1
 
     chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
@@ -397,39 +392,7 @@ service pvrsrvinit /vendor/bin/pvrsrvinit
     oneshot
 
 
-# Lazy way go get things done when /system(/build.prop) is up
-on property:ro.product.device=p920
-    wait /sys/class/rfkill/rfkill0/type
-    start uim
-    wait /data/misc/wifi
-    start wlan_precheck
 
-service wpa_supplicant /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf
-    class main
-    socket wpa_wlan0 dgram 660 wifi wifi
-    group system wifi inet
-    disabled
-    oneshot
-
-service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
-    class main
-    disabled
-    oneshot
-
-service iprenew_wlan0 /system/bin/dhcpcd -n wlan0
-    class main
-    disabled
-    oneshot
-
-service hostapd_bin /system/bin/hostapd -d /data/misc/wifi/hostapd.conf
-    socket wpa_wlan1 dgram 660 wifi wifi
-    disabled
-    oneshot
-
-service wlan_precheck /system/bin/wlan-precheck
-    class main
-    disabled
-    oneshot
 
 # load IVA firmware
 #service baseimage /system/bin/syslink_daemon.out /system/base_image_sys_m3.xem3 /system/base_image_app_m3.xem3
@@ -439,19 +402,7 @@ service wlan_precheck /system/bin/wlan-precheck
 #     group media
 #     oneshot
 
-service uim /system/bin/uim-sysfs
-    class main
-    user root
-    group media bluetooth
-    disabled
-    oneshot
 
-service hciattach /system/bin/hciattach -l
-    class main
-    user root
-    group bluetooth net_bt_admin misc
-    disabled
-    oneshot
 
 ## GPS
 service glgps /system/bin/glgps -c /system/etc/gps_brcm_conf.xml
