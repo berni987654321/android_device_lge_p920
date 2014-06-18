@@ -27,11 +27,15 @@ on init
 	# KitKat SDCARD
     mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
     mkdir /storage/sdcard0 0700 root root
-	#chmod 0755 /storage/sdcard0
+	chmod 0755 /storage/sdcard0
+
+	mkdir /storage/sdcard0/.android_secure 0775 system system
+	symlink /storage/sdcard0/.android_secure /sdcard/.android_secure
+    symlink /storage/sdcard0/.android_secure /mnt/sdcard/.android_secure
 
 	mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /storage/sdcard1 0700 root root
-	#chmod 0755 /storage/sdcard1
+	chmod 0755 /storage/sdcard1
 
     export EXTERNAL_STORAGE /storage/sdcard0
 	export SECONDARY_STORAGE /storage/sdcard1
@@ -46,6 +50,13 @@ on fs
 	# disable FUSE property value
     setprop ro.crypto.fuse_sdcard true
 	mount_all /fstab.lgep920board
+	
+on post-fs-data
+
+# FUSE property value
+    #we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+    chown media_rw media_rw /data/media
 
 on boot
 
