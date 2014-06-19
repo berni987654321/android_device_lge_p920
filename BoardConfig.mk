@@ -55,6 +55,7 @@ TARGET_KERNEL_MODULES := KERNEL_SGX_MODULES KERNEL_WL12XX_MODULES
 ###########################BOARDSTUFF######################################
 BOARD_HAVE_BLUETOOTH := true
 BOARD_WPAN_DEVICE := true
+BOARD_HAVE_BLUETOOTH_TI := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
 BOARD_NEEDS_CUTILS_LOG := true
 ### Kitkat Specific
