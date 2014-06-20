@@ -2,6 +2,10 @@ import init.p920.usb.rc
 import init.storage.rc
 import init.wifi.bt.rc
 
+on init
+# Preload libjhead for camera
+    export LD_PRELOAD /system/lib/libjhead.so
+
 on post-fs-data
 	mkdir /misc 0771 system misc
     mkdir /lgdrm 0770 system system
