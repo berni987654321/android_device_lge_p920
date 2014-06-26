@@ -50,6 +50,7 @@ on fs
 	# disable FUSE property value
     setprop ro.crypto.fuse_sdcard true
 	mount_all /fstab.lgep920board
+	swapon_all /fstab.lgep920board
 	
 on post-fs-data
 
