@@ -62,6 +62,7 @@ BOARD_NEEDS_CUTILS_LOG := true
 # Disable SELinux
 PRODUCT_PROPERTY_OVERRIDES += \
 ro.boot.selinux=disabled
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.jit.codecachesize=0 
 ###GL
 TARGET_USES_GL_VENDOR_EXTENSIONS := false
 USE_OPENGL_RENDERER := true
