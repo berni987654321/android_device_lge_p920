@@ -368,6 +368,8 @@ chown radio radio /dev/block/mmcblk0p2
     chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
     chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
+	
+	write /proc/sys/vm/page-cluster 0
 
 on boot
 
