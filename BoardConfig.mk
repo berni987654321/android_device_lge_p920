@@ -13,6 +13,7 @@ TARGET_ARCH_VARIANT_CPU := cortex-a9
 TARGET_ARCH_VARIANT_FPU := neon
 TARGET_CPU_VARIANT  := $(TARGET_ARCH_VARIANT_CPU)
 ARCH_ARM_HAVE_TLS_REGISTER := true
+TARGET_ARCH_LOWMEM := true
 NEEDS_ARM_ERRATA_754319_754320 := true
 BOARD_GLOBAL_CFLAGS += -DNEEDS_ARM_ERRATA_754319_754320
 
@@ -60,9 +61,11 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
 #BOARD_NEEDS_CUTILS_LOG := true
 ### Kitkat Specific
 # Disable SELinux
+BOARD_HAVE_OLD_ION_API := true
 PRODUCT_PROPERTY_OVERRIDES += \
-ro.boot.selinux=disabled
-PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.jit.codecachesize=0 
+ro.boot.selinux=disabled \
+dalvik.vm.jit.codecachesize=0 \
+ro.config.low_ram=true
 ###GL
 TARGET_USES_GL_VENDOR_EXTENSIONS := false
 USE_OPENGL_RENDERER := true
@@ -114,6 +117,8 @@ ENHANCED_DOMX := true
 
 BOARD_RIL_CLASS := ../../../device/lge/p920/ril/
 BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/lge/p920/vibrator.c
+
+BOARD_ALLOW_SUSPEND_IN_CHARGER := true
 ############################################################################
 
 ################RECOVERY####################################
