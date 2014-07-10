@@ -23,6 +23,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ueventd.lgep920board.rc:root/ueventd.lgep920board.rc \
     $(LOCAL_PATH)/fstab.cosmo:root/fstab.lgep920board \
 	$(LOCAL_PATH)/init.storage.rc:root/init.storage.rc \
+	$(LOCAL_PATH)/prebuilt/TIInit_7.2.31.bts:system/etc/firmware/TIInit_7.2.31.bts \
 	$(LOCAL_PATH)/init.wifi.bt.rc:root/init.wifi.bt.rc
 
 ## Wifi
@@ -61,7 +62,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml
 
 ## GPS
 PRODUCT_COPY_FILES += \
