@@ -24,9 +24,16 @@ BOARD_USES_UBOOT_MULTIIMAGE := true
 BOARD_UBOOT_ENTRY := 0x80008000
 BOARD_UBOOT_LOAD := 0x80008000
 
+# SELinux Stuff
+BOARD_KERNEL_CMDLINE := androidboot.selinux=permessive
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.boot.selinux=disabled
+
 # Try to build the kernel
 TARGET_KERNEL_CONFIG := cyanogenmod_p920_defconfig
 TARGET_KERNEL_SOURCE := kernel/lge/omap4-common
+
+
 # Keep this as a fallback
 #TARGET_PREBUILT_KERNEL := device/lge/p920/kernel
 
