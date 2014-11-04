@@ -117,3 +117,10 @@
 /dev/input 0666 bluetooth bluetooth
 /dev/graphics/fb0 0777 system system
 /dev/mtc_eta_log 0777 system system
+
+# bluetooth uart
+/dev/ttyS1              0660    bluetooth  	bluetooth
+
+# BT
+/dev/hci_tty            0666    bluetooth 	bluetooth
+/dev/rfcomm0            0600    system     	system

@@ -140,7 +140,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	dalvik.vm.jit.codecachesize=0 \
 	ro.config.low_ram=true \
 	ro.bq.gpu_to_cpu_unsupported=1 \
-	wifi.interface=wlan0
+	wifi.interface=wlan0 \
+	ro.bt.bdaddr_path=/sys/devices/platform/bd_address/bdaddr_if
 
 #FRAMEWORKS_BASE_SUBDIRS += \
 #	../../$(LOCAL_PATH)/framework-addons/
