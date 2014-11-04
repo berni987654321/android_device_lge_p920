@@ -55,10 +55,8 @@ TARGET_KERNEL_MODULES := KERNEL_SGX_MODULES KERNEL_WL12XX_MODULES
 
 ###########################BOARDSTUFF######################################
 BOARD_HAVE_BLUETOOTH := true
-BOARD_WPAN_DEVICE := true
 BOARD_HAVE_BLUETOOTH_TI := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
-BOARD_BLUEDROID_VENDOR_CONF := device/lge/p920/bluetooth/libbt_vndcfg.txt
 #BOARD_NEEDS_CUTILS_LOG := true
 ### Kitkat Specific
 # Disable SELinux
@@ -84,8 +82,7 @@ PRODUCT_WIRELESS_TOOLS           := true
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wl12xx_sdio.ko"
 WIFI_DRIVER_MODULE_NAME          := "wl12xx_sdio"
 WIFI_BAND := 802_11_ABGN
-PRODUCT_PROPERTY_OVERRIDES := \
-       wifi.interface=wlan0
+       
 ###FileSystem####
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 619249664
