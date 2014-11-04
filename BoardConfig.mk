@@ -58,6 +58,7 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_WPAN_DEVICE := true
 BOARD_HAVE_BLUETOOTH_TI := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
+BOARD_BLUEDROID_VENDOR_CONF := device/lge/p920/bluetooth/libbt_vndcfg.txt
 #BOARD_NEEDS_CUTILS_LOG := true
 ### Kitkat Specific
 # Disable SELinux
