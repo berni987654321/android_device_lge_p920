@@ -135,6 +135,12 @@ PRODUCT_PACKAGES += \
 FRAMEWORKS_BASE_SUBDIRS += \
 	$(addsuffix /java, omapmmlib )
 
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.boot.selinux=disabled \
+	dalvik.vm.jit.codecachesize=0 \
+	ro.config.low_ram=true \
+	ro.bq.gpu_to_cpu_unsupported=1
+
 #FRAMEWORKS_BASE_SUBDIRS += \
 #	../../$(LOCAL_PATH)/framework-addons/
 

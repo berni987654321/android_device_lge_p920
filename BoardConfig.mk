@@ -62,10 +62,6 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/p920/bluetooth
 ### Kitkat Specific
 # Disable SELinux
 BOARD_HAVE_OLD_ION_API := true
-PRODUCT_PROPERTY_OVERRIDES += \
-ro.boot.selinux=disabled \
-dalvik.vm.jit.codecachesize=0 \
-ro.config.low_ram=true
 ###GL
 TARGET_USES_GL_VENDOR_EXTENSIONS := false
 USE_OPENGL_RENDERER := true
